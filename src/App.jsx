@@ -25,12 +25,36 @@ function Counter() {
   );
 }
 
+class CounterErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.log("error detected! we are setting state");
+    this.setState({hasError:true});
+  }
+
+  render() {
+    if (this.state.hasError) {
+      console.log("rendering error");
+      // You can render any custom fallback UI
+      return <h1>Something went wrong inside counter!!</h1>;
+    }
+
+    return this.props.children;
+  }
+}
+
 export default function App() {
   console.log('App');
   return (
     <div>
       This is App.jsx
-      <Counter/>
+      <CounterErrorBoundary>
+        <Counter/>
+      </CounterErrorBoundary>
     </div>
   );
 }
